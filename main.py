@@ -2,9 +2,10 @@ import pygame
 
 WIDTH, HEIGHT = 400, 400
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-
+black = (0, 0, 0)
 
 def draw():
+    WIN.fill(black)
     pygame.display.update()
 
 
