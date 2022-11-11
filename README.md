@@ -1,3 +1,3 @@
 # PYSNAKE
 
-**Pysake**, the best snake game!
+**Pysnake**, the best snake game!
