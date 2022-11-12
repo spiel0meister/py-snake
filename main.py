@@ -1,6 +1,7 @@
 from itertools import product
-import pygame
 from random import randint
+from typing import Tuple
+import pygame
 
 WIDTH, HEIGHT = 400, 400
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -18,8 +19,13 @@ class Pos:
         self.x = x
         self.y = y
 
+    @staticmethod
+    def create_random_pos(x_range: Tuple[int, int], y_range: Tuple[int, int]):
+        return Pos(randint(x_range[0], x_range[1]), randint(y_range[0], y_range[1]))
 
-snake = [Pos(randint(0, COLS-1), randint(0, ROWS-1))]
+
+snake = [Pos.create_random_pos((0, COLS-1), (0, ROWS-1))]
+food = Pos.create_random_pos((0, COLS-1), (0, ROWS-1))
 
 
 def draw():
@@ -28,6 +34,9 @@ def draw():
     for pos in snake:
         pygame.draw.rect(WIN, red, (pos.x * CELL_WIDTH,
                          pos.y * CELL_HEIGHT, CELL_WIDTH - 1, CELL_HEIGHT - 1))
+
+    pygame.draw.rect(WIN, yellow, (food.x * CELL_WIDTH,
+                                   food.y * CELL_HEIGHT, CELL_WIDTH - 1, CELL_HEIGHT - 1))
 
     pygame.display.update()
 
