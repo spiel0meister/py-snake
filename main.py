@@ -2,12 +2,14 @@ from random import randint
 import pygame
 import Snake
 
-WIDTH, HEIGHT = 400, 400
+pygame.init()
+WIDTH, HEIGHT = 600, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 CLOCK = pygame.time.Clock()
 
-ROWS, COLS = 10, 10
+ROWS, COLS = 20, 20
 CELL_WIDTH, CELL_HEIGHT = WIDTH / COLS, HEIGHT / ROWS
+font1 = pygame.font.SysFont('freesanbold.ttf', 50)
 
 black = (0, 0, 0)
 red = (255, 0, 0)
@@ -51,6 +53,7 @@ def while_loop():
     food = create_food(snake.body)
 
     run = True
+    lost = False
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -58,19 +61,39 @@ def while_loop():
                 break
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    snake.state = 0
+                    if snake.state != 2:
+                        snake.state = 0
                 elif event.key == pygame.K_d:
-                    snake.state = 1
+                    if snake.state != 3:
+                        snake.state = 1
                 elif event.key == pygame.K_s:
-                    snake.state = 2
+                    if snake.state != 0:
+                        snake.state = 2
                 elif event.key == pygame.K_a:
-                    snake.state = 3
+                    if snake.state != 1:
+                        snake.state = 3
 
         if snake.pick_up_food(food):
             food = create_food(snake.body)
-        snake.update()
+        if snake.update(ROWS, COLS):
+            run = False
+            lost = True
         draw(snake, food)
         CLOCK.tick(5)
+    if not lost:
+        return
+    run = True
+    while run:
+        WIN.fill(black)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                break
+
+        text1 = font1.render("I'm sorry, but you lost!", True, (255, 255, 255))
+        textRect1 = text1.get_rect()
+        WIN.blit(text1, textRect1)
+        pygame.display.update()
 
 
 def main(): while_loop()

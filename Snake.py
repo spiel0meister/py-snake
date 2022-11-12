@@ -30,7 +30,7 @@ class Snake:
             pygame.draw.rect(WIN, color, (pos.x * W,
                                           pos.y * H, W - 1, H - 1))
 
-    def update(self):
+    def update(self, rows, cols):
         i = len(self.body) - 1
         while i > 0:
             self.body[i].x = self.body[i-1].x
@@ -38,13 +38,14 @@ class Snake:
             i -= 1
         state = self.state
         if state == 0:
-            self.head.y -= 1
+            self.head.y = (self.head.y - 1 + rows) % rows
         elif state == 1:
-            self.head.x += 1
+            self.head.x = (self.head.x + 1 + cols) % cols
         elif state == 2:
-            self.head.y += 1
+            self.head.y = (self.head.y + 1 + rows) % rows
         elif state == 3:
-            self.head.x -= 1
+            self.head.x = (self.head.x - 1 + cols) % cols
+        return any(pos.x == self.head.x and pos.y == self.head.y for pos in self.body[1:])
 
     def pick_up_food(self, food):
         if food.x != self.head.x or food.y != self.head.y:
